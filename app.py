@@ -1,15 +1,18 @@
-import json
+## IMPORTS ##
+
+# Import modules
 import configparser
-from tabulate import tabulate
 import sqlite3
+from tabulate import tabulate
+from os.path import exists
+
+## MISC CONFIGS ##
 
 # Read configurations
 config = configparser.ConfigParser()
 config.read('configs/configs.ini')
 
-# `DATABASE = config['database']['DATABASE']` is reading the value of the `DATABASE` key from the
-# `database` section of the `configs.ini` file and assigning it to the `DATABASE` variable. This value
-# is used as the name of the SQLite database file that the program will connect to.
+# Set database file
 DATABASE = config['database']['DATABASE']
 
 # Database init
@@ -19,62 +22,80 @@ def db_init():
 
     return connection, cursor
 
-# `db_connection, db_cursor = db_init()` is initializing a connection to a SQLite database and
-# returning both the connection and cursor objects. The connection object is used to connect to the
-# database and the cursor object is used to execute SQL queries on the database. The returned objects
-# are then assigned to the variables `db_connection` and `db_cursor`, respectively, so that they can
-# be used throughout the program to interact with the database.
 db_connection, db_cursor = db_init()
 
+# Create tables
 def create_tables():
     """
-    The function creates two tables in a database, one for players and one for matches.
+    The function creates two tables in a SQLite database if they do not already exist.
     """
 
-    db_cursor.execute("CREATE TABLE players(id, name, matches, wins, draws, losses, ratio, points)")
-    db_cursor.execute("CREATE TABLE matches(id, date, teamA, teamB, result)")
+    db_cursor.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='players'")
+    if db_cursor.fetchone()[0] == 0: {
+        db_cursor.execute("CREATE TABLE players(id, name, matches, wins, draws, losses, ratio, points)")
+    }
 
-# create_tables()
+    db_cursor.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='matches'")
+    if db_cursor.fetchone()[0] == 0: {
+        db_cursor.execute("CREATE TABLE matches(id, date, teamA, teamB, result)")
+    }
 
+## PLAYER ACTIONS ##
+
+# Create player
 def create_player():
-    """
-    This function creates a new player in a database and allows the user to add more players if desired.
-    """
 
     player_name = input("Nome: ")
-    db_cursor.execute(f"INSERT INTO players (id, name, matches, wins, draws, losses, ratio, points) VALUES (0, '{player_name}', 0, 0, 0, 0, '0.00%', 0)")
+    db_cursor.execute(f"SELECT * FROM players")
+    player_counter = len(db_cursor.fetchall())
+    db_cursor.execute(f"INSERT INTO players (id, name, matches, wins, draws, losses, ratio, points) VALUES ('{player_counter}', '{player_name}', 0, 0, 0, 0, '0.00%', 0)")
     db_connection.commit()
 
     print_players_table()
 
     add_new_player = input("Queres adicionar outro  jogador? (S / N)")
-
     if add_new_player == "S":
         create_player()
     if add_new_player == "N":
-        exit()
+        menu()
 
+# Read player
 def read_players():
-    """
-    This function reads all the data from the "players" table in a database and returns it.
-    :return: the result of the SQL query "SELECT * FROM players" executed on the database cursor object.
-    This query is fetching all the data from the "players" table in the database. The returned value is
-    likely a collection of rows or a cursor object that can be iterated over to access the data.
-    """
 
     players_data = db_cursor.execute("SELECT * FROM players")
 
     return players_data
 
+# Delete player
 def delete_player():
 
-    return 0
+    print_players_table()
 
+    player_id = input("ID: ")
+    db_cursor.execute(f"DELETE FROM players WHERE id = {player_id}")
+    db_connection.commit()
+
+    print_players_table()
+
+    delete_new_player = input("Queres apagar outro  jogador? (S / N)")
+    if delete_new_player == "S":
+        delete_player()
+    if delete_new_player == "N":
+        menu()
+
+# Print players table
+def print_players_table():
+
+    players_table_data = [["ID", "Nome", "Jogos", "Vitorias", "Empates", "Derrotas", "Ratio (%)", "Pontos"]]
+    players_table_data += read_players()
+    players_table = tabulate(players_table_data, headers = 'firstrow')
+
+    print(players_table)
+
+## MATCH ACTIONS
+
+# Create match
 def create_match():
-    """
-    This function creates a new match by taking input for the match date, team A and team B players, and
-    the match result, and then inserts this information into a database table.
-    """
 
     match_date = input("Data: ")
 
@@ -103,22 +124,27 @@ def create_match():
 
     print_matches_table()
 
+    calculate_points(match_teamA, match_teamB, match_result)
+
+# Read match
 def read_matches():
-    """
-    This function reads all the data from the "matches" table in a database and returns it.
-    :return: The function `read_matches()` is returning the result of the SQL query "SELECT * FROM
-    matches" executed using the database cursor. The result is a collection of data representing all the
-    matches in the database table "matches".
-    """
 
     matches_data = db_cursor.execute("SELECT * FROM matches")
 
     return matches_data
 
+## COMPUTING ##
+
+# Calculate points
+def calculate_points(teamA, teamB, result):
+
+    if result == 'A':
+        for member in teamA:
+            db_cursor.execute(f"UPDATE players SET matches = matches + 1, losses = losses + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2) || '%' WHERE name = '{member}'")
+            db_connection.commit()
+
+# Print match
 def print_matches_table():
-    """
-    This function prints a table of matches data, including the ID, date, team A, team B, and result.
-    """
 
     matches_table_data = [["ID", "Data", "Equipa A", "Equipa B", "Resultado"]]
     matches_table_data += read_matches()
@@ -126,35 +152,27 @@ def print_matches_table():
 
     print(matches_table)
 
-def print_players_table():
-    """
-    This function prints a table of players' data, including their ID, name, number of games played,
-    number of wins, draws, losses, ratio, and points.
-    """
-
-    players_table_data = [["ID", "Nome", "Jogos", "Vitorias", "Empates", "Derrotas", "Ratio", "Pontos"]]
-    players_table_data += read_players()
-    players_table = tabulate(players_table_data, headers = 'firstrow')
-
-    print(players_table)
+    menu()
 
 ## MAIN ##
 
-# The `if __name__ == '__main__':` block is the entry point of the program. It checks if the current
-# module is being run as the main program (as opposed to being imported as a module into another
-# program). If it is the main program, it initializes the database connection by calling the
-# `db_init()` function, and then prompts the user to select an option from a menu of choices.
-# Depending on the user's choice, it calls one of the functions `print_players_table()`,
-# `create_player()`, `delete_player()`, or `create_match()` to perform a specific action related to
-# managing player and match data in the database.
-if __name__ == '__main__':
-    db_init()
-    option = input("Opções:\n1 - Ver tabela\n2 - Criar jogador\n3 - Apagar jogador\n4 - Registar jogo\n")
+# Main menu
+def menu():
+
+    option = input("Opções:\n1 - Ver tabela\n2 - Criar jogador\n3 - Apagar jogador\n4 - Registar jogo\n5 - Saír\n")
     if option == "1":
         print_players_table()
+        menu()
     if option == "2":
         create_player()
     if option == "3":
         delete_player()
     if option == "4":
         create_match()
+    if option == "5":
+        exit()
+
+if __name__ == '__main__':
+    db_init()
+    create_tables()
+    menu()
