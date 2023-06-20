@@ -140,7 +140,26 @@ def calculate_points(teamA, teamB, result):
 
     if result == 'A':
         for member in teamA:
+            db_cursor.execute(f"UPDATE players SET matches = matches + 1, wins = wins + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2), points = points + 3 || '%' WHERE name = '{member}'")
+            db_connection.commit()
+        for member in teamB:
             db_cursor.execute(f"UPDATE players SET matches = matches + 1, losses = losses + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2) || '%' WHERE name = '{member}'")
+            db_connection.commit()
+
+    if result == 'B':
+        for member in teamB:
+            db_cursor.execute(f"UPDATE players SET matches = matches + 1, wins = wins + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2), points = points + 3 || '%' WHERE name = '{member}'")
+            db_connection.commit()
+        for member in teamA:
+            db_cursor.execute(f"UPDATE players SET matches = matches + 1, losses = losses + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2) || '%' WHERE name = '{member}'")
+            db_connection.commit()
+
+    if result == 'Empate':
+        for member in teamA:
+            db_cursor.execute(f"UPDATE players SET matches = matches + 1, draws = draws + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2), points = points + 1 || '%' WHERE name = '{member}'")
+            db_connection.commit()
+        for member in teamB:
+            db_cursor.execute(f"UPDATE players SET matches = matches + 1, draws = draws + 1, ratio = ROUND((wins*1.0 / matches*1.0) * 100, 2), points = points + 1 || '%' WHERE name = '{member}'")
             db_connection.commit()
 
 # Print match
