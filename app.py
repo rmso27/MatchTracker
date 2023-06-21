@@ -5,6 +5,8 @@ import configparser
 import sqlite3
 from tabulate import tabulate
 from os.path import exists
+import os
+clear = lambda: os.system('clear')
 
 ## MISC CONFIGS ##
 
@@ -62,7 +64,7 @@ def create_player():
 # Read player
 def read_players():
 
-    players_data = db_cursor.execute("SELECT * FROM players")
+    players_data = db_cursor.execute("SELECT * FROM players ORDER BY name")
 
     return players_data
 
@@ -72,7 +74,7 @@ def delete_player():
     print_players_table()
 
     player_id = input("ID: ")
-    db_cursor.execute(f"DELETE FROM players WHERE id = {player_id}")
+    db_cursor.execute(f"DELETE FROM players WHERE id = '{player_id}'")
     db_connection.commit()
 
     print_players_table()
@@ -85,6 +87,14 @@ def delete_player():
 
 # Print players table
 def print_players_table():
+
+    clear()
+
+    print("")
+    print("---------------------")
+    print("TABELA CLASSIFICATIVA")
+    print("---------------------")
+    print("")
 
     players_table_data = [["ID", "Nome", "Jogos", "Vitorias", "Empates", "Derrotas", "Ratio (%)", "Pontos"]]
     players_table_data += read_players()
@@ -165,6 +175,12 @@ def calculate_points(teamA, teamB, result):
 # Print match
 def print_matches_table():
 
+    print("")
+    print("----------------")
+    print("TABELA DE JOGOS")
+    print("----------------")
+    print("")
+
     matches_table_data = [["ID", "Data", "Equipa A", "Equipa B", "Resultado"]]
     matches_table_data += read_matches()
     matches_table = tabulate(matches_table_data, headers = 'firstrow')
@@ -177,6 +193,12 @@ def print_matches_table():
 
 # Main menu
 def menu():
+
+    print("")
+    print("-----")
+    print("MENU")
+    print("-----")
+    print("")
 
     option = input("Opções:\n1 - Ver tabela\n2 - Criar jogador\n3 - Apagar jogador\n4 - Registar jogo\n5 - Saír\n")
     if option == "1":
@@ -194,4 +216,5 @@ def menu():
 if __name__ == '__main__':
     db_init()
     create_tables()
+    clear()
     menu()
