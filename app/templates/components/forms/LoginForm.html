@@ -1,0 +1,17 @@
+<form class = "user-info-form" action = "/login" method = "post">
+    <b>E-Mail</b> <input type = "text" name = "email" required>
+    <b>Password</b> <input type = "password" name = "password" required>
+
+    <!-- Result message -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <span class = "user-info-form-notification">{{ messages[0] }}</span>
+    {% endif %}
+    {% endwith %}
+
+    <button type = "submit"><b>Login</b></button>
+    <span>Não tens conta? Cria <a href = "/register">aqui</a>.</span>
+    <span>Esqueceste-te da tua password? Recupera <a href = "/">aqui</a>.</span>
+</form>
+
+<!-- <script src ="../../static/js/script.js"></script> -->

@@ -1,0 +1,16 @@
+<form class = "user-info-form" action = "/create-account" method = "post">
+    <b>Name</b> <input type = "text" name = "name" required>
+    <b>E-Mail</b> <input type = "text" name = "email" required>
+
+    <!-- Result message -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <span class = "user-info-form-notification">{{ messages[0] }}</span>
+    {% endif %}
+    {% endwith %}
+
+    <b>Password</b> <input type = "password" name = "password" required>
+    <b>Confirmar Password</b> <input type = "password" required>
+    <button type = "submit"><b>Registar</b></button>
+    <span>Já tens conta? Faz login <a href = "/">aqui</a>.</span>
+</form>

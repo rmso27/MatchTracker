@@ -1,0 +1,17 @@
+/* DEFAULTS */
+:root {
+    --blue: #07F2F2;
+    --green: #05F26C;
+    --purple: #340040;
+    --pink: #F2055C;
+    --yellow: #EAF205;
+    --white: #FFFFFF;
+}
+
+.main-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--purple);
+}

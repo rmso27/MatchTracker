@@ -1,0 +1,140 @@
+/* DEFAULTS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+
+html {
+    font-size: 100%;
+    overflow: hidden;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+:root {
+    --blue: #07F2F2;
+    --green: #05F26C;
+    --purple: #340040;
+    --pink: #F2055C;
+    --yellow: #EAF205;
+    --white: #FFFFFF;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.main-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--purple);
+}
+
+.wrapper {
+    height: 100vh;
+    width: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--white);
+}
+
+.header {
+    height: 5vh;
+    width: 100vh;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    color: var(--white);
+    background-color: var(--purple);
+}
+
+.content {
+    padding: 4vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--white);
+}
+
+/* FORMS */
+.user-info-form {
+    display: flex;
+    flex-direction: column;
+    padding: 4rem;
+    color: var(--white);
+}
+
+.user-info-form input {
+    height: 50px;
+    margin: 8px 0;
+    padding: 0 1rem; /* Top and Bottom: 0 - Left and Right: 2rem (inside input) */
+    border-radius: 6px;
+    border: 2px solid var(--white);
+    background-color: var(--purple);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    color: var(--white);
+}
+
+.user-info-form button {
+    height: 35px;
+    margin: 20px 0;
+    padding: 0 2rem; /* Top and Bottom: 0 - Left and Right: 2rem */
+    border-radius: 6px;
+    border: 0px;
+    background-color: var(--pink);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    color: var(--white);
+}
+
+.user-info-form span {
+    font-size: 0.7rem;
+}
+
+.user-info-form-notification {
+    padding-bottom: 10px;
+    font-size: 0.7rem;
+    color: var(--yellow);
+}
+
+.user-info-form a {
+    color: var(--white);
+}
+
+/* TABLES */
+.main-report-table table {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    border-collapse: collapse;
+}
+
+.main-report-table table tr, td {
+    border: 1px dashed;
+    padding: 0.8rem;
+}
+
+/* NAVBARS */
+.profile-navbar {
+    height: 5vh;
+    padding-bottom: 4vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.profile-navbar a {
+    font-size: 0.8rem;
+    text-decoration: none;
+}
+
+.profile-navbar a:hover {
+    text-decoration: underline;
+}

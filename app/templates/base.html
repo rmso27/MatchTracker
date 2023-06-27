@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Weekend League Manager</title>
+        <meta content = "width=device-width, initial-scale=1" name = "viewport">
+        <link rel = "stylesheet" href = "{{ url_for('static', filename = 'css/css-primary.css') }}">
+        <link rel = "stylesheet" href = "{{ url_for('static', filename = 'css/css-secondary.css') }}">
+        <script src = "../static/js/script.js"></script>
+    </head>
+
+    <body>
+        <div class = "main-wrapper">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
