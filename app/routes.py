@@ -7,7 +7,8 @@ import configparser
 import os
 
 # Import functions
-from .user_db_functions import create_user, validate_login
+from .user_db_functions import create_user, validate_login, get_user_groups
+from .group_db_functions import create_group_db, read_group
 
 ## MAIN VARS ##
 
@@ -62,10 +63,26 @@ def create_account():
 @app.route('/profile/<id>')
 def profile(id):
 
-    return render_template("public/profile.html", name = session['name'])
+    groups_list = get_user_groups(id)
+
+    print(f"GROUPS LIST: {groups_list}")
+
+    groups_details = read_group(groups_list)
+
+    print(f"GROUP DETAILS: {groups_details}")
+
+    return render_template("profile/profile.html", name = session['name'], groups = groups_details)
 
 # See group details
 @app.route('/group/1')
 def group():
 
-    return render_template("public/group.html")
+    return render_template("profile/group.html")
+
+# Create group
+@app.route('/create-group', methods =  ["POST"])
+def create_group():
+
+    create_group_db()
+
+    return redirect(url_for('profile', id = session['user']))

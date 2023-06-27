@@ -1,0 +1,18 @@
+<div class = "main-report-table">
+    <table>
+        <tr>
+            <td style = "width: 100px;"><b>GRUPO</b></td>
+            <td style = "width: 100px;"><b>ADMINISTRADOR</b></td>
+            <td style = "width: 100px;"><b>DATA DE CRIAÇÃO</b></td>
+            <td style = "width: 100px;"><b>MEMBROS</td>
+        </tr>
+        <tr>
+            {% for group in groups %}
+                <td>{{ group.name }}</td>
+                <td>{{ group.owner }}</td>
+                <td>{{ group.createdAt }}</td>
+                <td>{{ group.members }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>

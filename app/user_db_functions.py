@@ -32,6 +32,7 @@ def create_user():
             "name": request.form['name'],
             "email": request.form['email'],
             "password": hash_me(request.form['password']),
+            "groups": [],
             "createdAt": timestamp
         })
         result_msg = "Account created successfully."
@@ -41,6 +42,15 @@ def create_user():
     return result_msg
 
 def read_user():
+
+    return 0
+
+def update_user(user):
+
+    Database.update_one('users',
+        {"name": user},
+        {"$set": {"groups": "Manquilha"}
+    })
 
     return 0
 
@@ -75,3 +85,12 @@ def validate_login():
     else:
         result_msg = "Authentication failed."
         return result_msg
+
+def get_user_groups(user_id):
+
+    # Query database for user data
+    user = Database.find_one('users', {"user_id": user_id})
+
+    groups_list = [user['groups']]
+
+    return groups_list

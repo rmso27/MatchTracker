@@ -1,0 +1,12 @@
+<form class = "user-info-form" action = "/create-group" method = "post">
+    <b>Nome</b> <input type = "text" name = "name" required>
+
+    <!-- Result message -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <span class = "user-info-form-notification">{{ messages[0] }}</span>
+    {% endif %}
+    {% endwith %}
+
+    <button type = "submit"><b>Registar</b></button>
+</form>
