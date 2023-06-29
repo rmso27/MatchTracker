@@ -8,10 +8,9 @@
         </tr>
         <tr>
             {% for group in groups %}
-                <td>{{ group.name }}</td>
+                <td><a href = "/group/{{ group.id }}">{{ group.name }}</a></td>
                 <td>{{ group.owner }}</td>
                 <td>{{ group.createdAt }}</td>
-                <td>{{ group.members }}</td>
             {% endfor %}
         </tr>
     </table>

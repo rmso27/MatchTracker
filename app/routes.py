@@ -8,7 +8,7 @@ import os
 
 # Import functions
 from .user_db_functions import create_user, validate_login, get_user_groups
-from .group_db_functions import create_group_db, read_group
+from .group_db_functions import create_group_db, read_group, read_group_by_id
 
 ## MAIN VARS ##
 
@@ -63,21 +63,23 @@ def create_account():
 @app.route('/profile/<id>')
 def profile(id):
 
-    groups_list = get_user_groups(id)
+    # groups_list = get_user_groups(id)
 
-    print(f"GROUPS LIST: {groups_list}")
+    # print(f"GROUPS LIST: {groups_list}")
 
-    groups_details = read_group(groups_list)
+    # groups_details = read_group(groups_list)
 
-    print(f"GROUP DETAILS: {groups_details}")
+    # print(f"GROUP DETAILS: {groups_details}")
 
-    return render_template("profile/profile.html", name = session['name'], groups = groups_details)
+    return render_template("profile/profile.html", name = session['name'])
 
 # See group details
-@app.route('/group/1')
-def group():
+@app.route('/group/<id>')
+def group(id):
 
-    return render_template("profile/group.html")
+    group = read_group_by_id(id)
+
+    return render_template("profile/group.html", group = group)
 
 # Create group
 @app.route('/create-group', methods =  ["POST"])

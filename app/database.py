@@ -54,3 +54,11 @@ class Database(object):
 def db_init():
     print("Initializing database...")
     Database.initialize()
+
+# Build database
+'''
+    NOTE: ONLY FOR MANUAL EXECUTION!!!
+'''
+def build_database():
+
+    return 0

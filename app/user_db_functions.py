@@ -22,17 +22,16 @@ def create_user():
     timestamp = get_current_date()
 
     # Validate if user exists
-    user_exists = validate_user(request.form['email'])
+    # user_exists = validate_user(request.form['user'])
+    user_exists = 1
 
     # If user doesn't exist, insert data into database
     if user_exists != 0:
-        Database.insert_one('users', {
-            "_id": uuid.uuid4().hex,
-            "user_id": "1",
+        Database.insert_one('players', {
+            "player_id": uuid.uuid4().hex,
             "name": request.form['name'],
-            "email": request.form['email'],
+            "user": request.form['user'],
             "password": hash_me(request.form['password']),
-            "groups": [],
             "createdAt": timestamp
         })
         result_msg = "Account created successfully."
@@ -47,43 +46,36 @@ def read_user():
 
 def update_user(user):
 
-    Database.update_one('users',
-        {"name": user},
-        {"$set": {"groups": "Manquilha"}
-    })
-
     return 0
 
 def delete_user():
 
-    Database.delete_one('users', {"email": email})
-
     return 0
 
-# Validate user
-def validate_user(email):
+# # Validate user
+# def validate_user(user):
 
-    # Query database for user data
-    if Database.find_one('users', {"email": email}):
-        user_exists = 0
-    else:
-        user_exists = 1
+#     # Query database for user data
+#     if Database.find_one('users', {"user": user}):
+#         user_exists = 0
+#     else:
+#         user_exists = 1
 
-    return user_exists
+#     return user_exists
 
 # Validate login
 def validate_login():
 
     # Query database for user data
-    user = Database.find_one('users', {"email": request.form['email']})
+    user = Database.find_one('players', {"user": request.form['user']})
 
     # If the user exists, validate password and set login status
     if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['password']):
         session['logged_in'] = True
-        session['user'] = user['user_id']
+        session['user'] = user['player_id']
         session['name'] = user['name']
     else:
-        result_msg = "Authentication failed."
+        result_msg = "Autenticação falhou."
         return result_msg
 
 def get_user_groups(user_id):

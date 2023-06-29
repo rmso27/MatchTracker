@@ -23,14 +23,11 @@ def create_group_db():
     # If user doesn't exist, insert data into database
     if group_exists != 0:
         Database.insert_one('groups', {
-            "_id": uuid.uuid4().hex,
-            "group_id": "1",
+            "group_id": uuid.uuid4().hex,
             "name": group_name,
             "owner": owner, # same as the logged in user
-            "members": "Ruben Oliveira",
             "createdAt": timestamp
         })
-        update_user(group_name, owner)
         result_msg = "Grupo criado com sucesso."
     else:
         result_msg = "Grupo já existe."
@@ -44,13 +41,23 @@ def read_group(groups):
     for group in groups:
         group_data = Database.find_one('groups', {"name": group})
         groups_details += [{
+            "id": group_data['group_id'],
             "name": group_data['name'],
             "owner": group_data['owner'],
-            "members": group_data['members'],
             "createdAt": group_data['createdAt']
         }]
 
     return groups_details
+
+def read_group_by_id(id):
+
+    group_data = Database.find_one('groups', {"group_id": id})
+
+    print(f"DATA: {group_data}")
+
+    group = group_data['name']
+
+    return group
 
 def update_group():
 
