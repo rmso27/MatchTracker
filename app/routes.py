@@ -67,11 +67,11 @@ def profile(id):
 
     # print(f"GROUPS LIST: {groups_list}")
 
-    # groups_details = read_group(groups_list)
+    groups_details = read_group('Manquilha')
 
-    # print(f"GROUP DETAILS: {groups_details}")
+    print(f"GROUP DETAILS: {groups_details}")
 
-    return render_template("profile/profile.html", name = session['name'])
+    return render_template("profile/profile.html", name = session['name'], groups = groups_details)
 
 # See group details
 @app.route('/group/<id>')

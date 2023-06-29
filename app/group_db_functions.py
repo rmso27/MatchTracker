@@ -38,14 +38,14 @@ def read_group(groups):
 
     groups_details = []
 
-    for group in groups:
-        group_data = Database.find_one('groups', {"name": group})
-        groups_details += [{
-            "id": group_data['group_id'],
-            "name": group_data['name'],
-            "owner": group_data['owner'],
-            "createdAt": group_data['createdAt']
-        }]
+    # for group in groups:
+    group_data = Database.find_one('groups', {"name": groups})
+    groups_details += [{
+        "id": group_data['group_id'],
+        "name": group_data['name'],
+        "owner": group_data['owner'],
+        "createdAt": group_data['createdAt']
+    }]
 
     return groups_details
 
