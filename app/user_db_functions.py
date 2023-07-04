@@ -63,6 +63,15 @@ def delete_user():
 
 #     return user_exists
 
+def read_users():
+
+    list_users = []
+    users = Database.find('players', {}, {'name': 1})
+    for user in users:
+        list_users += [user['name']]
+
+    return list_users
+
 # Validate login
 def validate_login():
 

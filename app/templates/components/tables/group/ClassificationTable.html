@@ -1,5 +1,8 @@
 <div class = "main-report-table">
     <table>
+        <thead>
+            <p><h2>{{ group }}</h2></p>
+        </thead>
         <tr>
             <td style = "width: 100px;"><b>JOGADOR</b></td>
             <td style = "width: 100px;"><b>VITÓRIAS</b></td>
@@ -17,4 +20,5 @@
             <td>13</td>
         </tr>
     </table>
+    {% include "components/forms/user/AddPlayerToGroup.html" %}
 </div>

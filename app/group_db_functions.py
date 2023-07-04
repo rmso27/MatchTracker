@@ -70,3 +70,21 @@ def delete_group():
 def validate_group(name):
 
     return 1
+
+def create_group_player():
+
+    group_id = 0
+    player_id = 0
+
+    Database.insert_one('groups_players', {
+        "group_id": group_id,
+        "player_id": player_id,
+        "matches": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "ratio": "0.00%",
+        "points": 0,
+    })
+
+    return 0
