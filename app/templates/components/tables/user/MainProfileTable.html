@@ -7,14 +7,15 @@
             <td style = "width: 100px;"><b>GRUPO</b></td>
             <td style = "width: 100px;"><b>ADMINISTRADOR</b></td>
             <td style = "width: 100px;"><b>DATA DE CRIAÇÃO</b></td>
-            <td style = "width: 100px;"><b>MEMBROS</td>
+            <td style = "width: 100px;"><b>Nº DE MEMBROS</td>
         </tr>
-        <tr>
-            {% for group in groups %}
+        {% for group in groups %}
+            <tr>
                 <td><a href = "/group/{{ group.id }}">{{ group.name }}</a></td>
                 <td>{{ group.owner }}</td>
                 <td>{{ group.createdAt }}</td>
-            {% endfor %}
-        </tr>
+                <td>20</td>
+            </tr>
+        {% endfor %}
     </table>
 </div>
