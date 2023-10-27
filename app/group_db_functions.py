@@ -53,8 +53,6 @@ def read_group_by_id(id):
 
     group_data = Database.find_one('groups', {"group_id": id})
 
-    print(f"DATA: {group_data}")
-
     group = group_data['name']
 
     return group
