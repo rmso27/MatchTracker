@@ -7,7 +7,7 @@ import configparser
 import os
 
 # Import functions
-from .user_db_functions import create_user, validate_login, get_user_groups, read_users
+from .user_db_functions import create_user, validate_login, get_user_groups, read_users, update_user_groups
 from .group_db_functions import create_group_db, read_group, read_group_by_id
 
 ## MAIN VARS ##
@@ -80,6 +80,8 @@ def group(id):
 
     group = read_group_by_id(id)
     list_users = read_users()
+    session['group'] = group
+    session['group_id'] = id
 
     return render_template("profile/group.html", group = group, users = list_users)
 
@@ -93,3 +95,13 @@ def create_group():
     flash(result_msg)
 
     return redirect(url_for('profile', id = session['user_id']))
+
+# Add user to group
+@app.route('/add-user-group', methods =  ["GET", "POST"])
+def add_user_group():
+
+    user_to_add = request.form.get('user')
+
+    update_user_groups(user_to_add, session['group'])
+
+    return redirect(url_for('group', id = session['group_id']))
