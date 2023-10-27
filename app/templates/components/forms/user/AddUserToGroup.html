@@ -1,7 +1,7 @@
-<form class = "user-info-form" action = "" method = "post">
+<form class = "user-info-form" action = "/add-user-group" method = "post">
     <b>Nome</b>
 
-    <select>
+    <select name = "user">
         {% for user in users %}
             <option value="{{ user }}">{{ user }}</option>
         {% endfor %}
