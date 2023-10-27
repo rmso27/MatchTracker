@@ -37,7 +37,7 @@ def login():
 
     # If login is successful
     if session['logged_in'] == True:
-        return redirect(url_for('profile', id = session['user']))
+        return redirect(url_for('profile', id = session['user_id']))
     else:
         flash(result_msg)
 
@@ -63,15 +63,16 @@ def create_account():
 @app.route('/profile/<id>')
 def profile(id):
 
-    # groups_list = get_user_groups(id)
+    groups_list = get_user_groups(id)
 
-    # print(f"GROUPS LIST: {groups_list}")
+    # If the user is part of any group
+    if groups_list:
+        groups_details = read_group(groups_list)
+    else:
+        groups_details = ""
 
-    groups_details = read_group('Manquilha')
-
-    print(f"GROUP DETAILS: {groups_details}")
-
-    return render_template("profile/profile.html", name = session['name'], groups = groups_details)
+    # return render_template("profile/profile.html", name = session['name'], groups = groups_details)
+    return render_template("profile/profile.html", groups = groups_details)
 
 # See group details
 @app.route('/group/<id>')
@@ -86,6 +87,9 @@ def group(id):
 @app.route('/create-group', methods =  ["POST"])
 def create_group():
 
-    create_group_db()
+    group_name = request.form['group']
 
-    return redirect(url_for('profile', id = session['user']))
+    result_msg = create_group_db(session['name'], session['user_id'], group_name)
+    flash(result_msg)
+
+    return redirect(url_for('profile', id = session['user_id']))

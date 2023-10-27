@@ -7,27 +7,26 @@ from flask import request
 # Import functions
 from .database import Database
 from .misc_functions import get_current_date
-from .user_db_functions import update_user
+from .user_db_functions import update_user_groups
 
-def create_group_db():
+def create_group_db(user_name, user_id, group_name):
 
     # Set timestamp
     timestamp = get_current_date()
 
-    group_name = "Manquilha"
-    owner = "Ruben Oliveira"
-
-    # Validate if user exists
+    # Validate if group exists
     group_exists = validate_group(group_name)
 
-    # If user doesn't exist, insert data into database
+    # If group doesn't exist, insert data into database
     if group_exists != 0:
         Database.insert_one('groups', {
             "group_id": uuid.uuid4().hex,
             "name": group_name,
-            "owner": owner, # same as the logged in user
+            "owner": user_name, # same as the logged in user
+            "owner_id": user_id,
             "createdAt": timestamp
         })
+        update_user_groups(user_name, group_name)
         result_msg = "Grupo criado com sucesso."
     else:
         result_msg = "Grupo já existe."
@@ -38,14 +37,15 @@ def read_group(groups):
 
     groups_details = []
 
-    # for group in groups:
-    group_data = Database.find_one('groups', {"name": groups})
-    groups_details += [{
-        "id": group_data['group_id'],
-        "name": group_data['name'],
-        "owner": group_data['owner'],
-        "createdAt": group_data['createdAt']
-    }]
+    for group in groups:
+        group_data = Database.find_one('groups', {"name": group})
+        if group_data:
+            groups_details += [{
+                "id": group_data['group_id'],
+                "name": group_data['name'],
+                "owner": group_data['owner'],
+                "createdAt": group_data['createdAt']
+            }]
 
     return groups_details
 

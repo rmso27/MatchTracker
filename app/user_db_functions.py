@@ -27,16 +27,17 @@ def create_user():
 
     # If user doesn't exist, insert data into database
     if user_exists != 0:
-        Database.insert_one('players', {
-            "player_id": uuid.uuid4().hex,
+        Database.insert_one('users', {
+            "user_id": uuid.uuid4().hex,
             "name": request.form['name'],
             "user": request.form['user'],
             "password": hash_me(request.form['password']),
-            "createdAt": timestamp
+            "createdAt": timestamp,
+            "groups": []
         })
-        result_msg = "Account created successfully."
+        result_msg = "A sua conta foi criada com sucesso."
     else:
-        result_msg = "Account already exists."
+        result_msg = "A conta já existe."
 
     return result_msg
 
@@ -44,9 +45,9 @@ def read_user():
 
     return 0
 
-def update_user(user):
+def update_user_groups(user_name, group_name):
 
-    return 0
+    Database.update_one('users', {"name": user_name}, {"$push": {"groups": group_name}})
 
 def delete_user():
 
@@ -66,7 +67,7 @@ def delete_user():
 def read_users():
 
     list_users = []
-    users = Database.find('players', {}, {'name': 1})
+    users = Database.find('users', {}, {'name': 1})
     for user in users:
         list_users += [user['name']]
 
@@ -76,12 +77,12 @@ def read_users():
 def validate_login():
 
     # Query database for user data
-    user = Database.find_one('players', {"user": request.form['user']})
+    user = Database.find_one('users', {"user": request.form['user']})
 
     # If the user exists, validate password and set login status
     if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['password']):
         session['logged_in'] = True
-        session['user'] = user['player_id']
+        session['user_id'] = user['user_id']
         session['name'] = user['name']
     else:
         result_msg = "Autenticação falhou."
@@ -92,6 +93,6 @@ def get_user_groups(user_id):
     # Query database for user data
     user = Database.find_one('users', {"user_id": user_id})
 
-    groups_list = [user['groups']]
+    groups_list = user['groups']
 
     return groups_list
