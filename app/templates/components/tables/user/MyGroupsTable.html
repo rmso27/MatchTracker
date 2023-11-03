@@ -5,16 +5,25 @@
         </thead>
         <tr>
             <td style = "width: 100px;"><b>GRUPO</b></td>
-            <td style = "width: 100px;"><b>ADMINISTRADOR</b></td>
+            <td style = "width: 100px;"><b>PERFIL</b></td>
             <td style = "width: 100px;"><b>DATA DE CRIAÇÃO</b></td>
-            <td style = "width: 100px;"><b>Nº DE MEMBROS</td>
+            <td style = "width: 100px;"><b>Nº DE MEMBROS</b></td>
+            <td style = "width: 100px;"><b>OPÇÕES</b></td>
         </tr>
         {% for group in groups %}
             <tr>
                 <td><a href = "/group/{{ group.id }}">{{ group.name }}</a></td>
-                <td>{{ group.owner }}</td>
+                {% if group.isAdmin == True %}
+                    <td>Administrador</td>
+                {% else %}
+                    <td>Membro</td>
+                {% endif %}
                 <td>{{ group.createdAt }}</td>
                 <td>20</td>
+                <td>
+                    <a href = "">Editar</a>
+                    <a href = ""> Apagar</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

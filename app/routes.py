@@ -71,6 +71,15 @@ def profile(id):
     else:
         groups_details = ""
 
+    # Validate if current user is admin
+    for group in groups_details:
+        if session['name'] == group['owner']:
+            group['isAdmin'] = True
+        else:
+            group['isAdmin'] = False
+
+    print(f"GROUPS DETAILS: {groups_details}")
+
     # return render_template("profile/profile.html", name = session['name'], groups = groups_details)
     return render_template("profile/profile.html", groups = groups_details)
 

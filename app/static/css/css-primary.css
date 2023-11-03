@@ -48,10 +48,19 @@ body {
     height: 5vh;
     width: 100vh;
     display: flex;
-    justify-content: left;
+    justify-content: right;
     align-items: center;
     color: var(--white);
     background-color: var(--purple);
+}
+
+.header a {
+    color: var(--white);
+    text-decoration: none;
+}
+
+.header a:hover {
+    text-decoration: underline;
 }
 
 .content {
@@ -119,23 +128,4 @@ body {
 .main-report-table table tr, td {
     border: 1px dashed;
     padding: 0.8rem;
-}
-
-/* NAVBARS */
-.profile-navbar {
-    height: 5vh;
-    padding-bottom: 4vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.profile-navbar a {
-    font-size: 0.8rem;
-    text-decoration: none;
-}
-
-.profile-navbar a:hover {
-    text-decoration: underline;
 }
