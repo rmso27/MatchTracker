@@ -5,7 +5,7 @@ import uuid
 from flask import request
 
 # Import functions
-from .database import Database
+from app.database import Database
 from .misc_functions import get_current_date
 from .user_db_functions import update_user_groups
 
@@ -61,7 +61,9 @@ def update_group():
 
     return 0
 
-def delete_group():
+def delete_group_db(id):
+
+    Database.delete_one('groups', {"group_id": id})
 
     return 0
 

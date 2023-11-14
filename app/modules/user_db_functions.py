@@ -6,7 +6,7 @@ import uuid
 from flask import request, session
 
 # Import functions
-from .database import Database
+from app.database import Database
 from .misc_functions import get_current_date, hash_me
 
 ## FUNCTIONS ##

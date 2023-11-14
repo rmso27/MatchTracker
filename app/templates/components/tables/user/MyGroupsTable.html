@@ -12,7 +12,7 @@
         </tr>
         {% for group in groups %}
             <tr>
-                <td><a href = "/group/{{ group.id }}">{{ group.name }}</a></td>
+                <td><a href = "/groups/{{ group.id }}">{{ group.name }}</a></td>
                 {% if group.isAdmin == True %}
                     <td>Administrador</td>
                 {% else %}
@@ -21,8 +21,8 @@
                 <td>{{ group.createdAt }}</td>
                 <td>20</td>
                 <td>
-                    <a href = "">Editar</a>
-                    <a href = ""> Apagar</a>
+                    <a href = "/groups/{{ group.id }}?update">Editar</a>
+                    <a href = "/groups/delete/{{ group.id }}">Apagar</a>
                 </td>
             </tr>
         {% endfor %}
