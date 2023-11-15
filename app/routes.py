@@ -8,7 +8,7 @@ import os
 
 # Import functions
 from .modules.user_db_functions import create_user, validate_login, get_user_groups, read_users, update_user_groups
-from .modules.group_db_functions import create_group_db, read_group, read_group_by_id, delete_group_db
+from .modules.group_db_functions import create_group_db, read_group_db, read_group_by_id, delete_group_db
 
 ## MAIN VARS ##
 
@@ -18,11 +18,27 @@ app.config['SECRET_KEY'] = os.urandom(12)
 
 ## ROUTES ##
 
+'''
+    STANDARD ROUTES:
+        - Here are the basic app routes: Home, Login,
+        Logout, Register;
+'''
+
 # Home
 @app.route('/')
 def home():
 
     return render_template("public/index.html")
+
+# Logout
+@app.route('/logout')
+def logout():
+
+    # Reset login cookie
+    session['logged_in'] = False
+    session['user'] = None
+
+    return redirect(url_for('home'))
 
 # Login
 @app.route('/login', methods =  ["POST"])
@@ -44,23 +60,19 @@ def login():
 
     return redirect(url_for('home'))
 
-# Logout
-@app.route('/logout')
-def logout():
-
-    # Reset login cookie
-    session['logged_in'] = False
-    session['user'] = None
-
-    return redirect(url_for('home'))
-
 # Register
 @app.route('/register')
 def register():
 
     return render_template("public/register.html")
 
-# Create account
+'''
+    USERS ROUTES:
+        - Here are the users routes. These routes are
+        responsible for the CRUD of the users's data;
+'''
+
+# Create user
 @app.route('/users', methods =  ["POST"])
 def create_account():
 
@@ -70,7 +82,7 @@ def create_account():
 
     return redirect(url_for('register'))
 
-# Personal page
+# Read user
 @app.route('/users/<id>')
 def profile(id):
 
@@ -78,9 +90,11 @@ def profile(id):
     if session['logged_in'] == True:
         groups_list = get_user_groups(id)
 
+        print(f"GROUPS LIST: {groups_list}")
+
         # If the user is part of any group
         if groups_list:
-            groups_details = read_group(groups_list)
+            groups_details = read_group_db(groups_list)
         else:
             groups_details = ""
 
@@ -95,20 +109,16 @@ def profile(id):
 
     return render_template("profile/profile.html", groups = groups_details)
 
-# See group details
-@app.route('/groups/<id>')
-def group(id):
+# Update user
 
-    # Validate if the uer is logged in. If not, redirect to homepage.
-    if session['logged_in'] == True:
-        group = read_group_by_id(id)
-        list_users = read_users()
-        session['group'] = group
-        session['group_id'] = id
-    else:
-        return redirect(url_for('home'))
 
-    return render_template("profile/group.html", group = group, users = list_users)
+# Delete user
+
+'''
+    GROUPS ROUTES:
+        - Here are the groups routes. These routes are
+        responsible for the CRUD of the group's data;
+'''
 
 # Create group
 @app.route('/groups', methods =  ["POST"])
@@ -121,14 +131,34 @@ def create_group():
 
     return redirect(url_for('profile', id = session['user_id']))
 
-# Add user to group
+# Read group
+@app.route('/groups/<id>')
+def read_group(id):
+
+    # Validate if the uer is logged in. If not, redirect to homepage.
+    if session['logged_in'] == True:
+        group = read_group_by_id(id)
+        list_users = read_users()
+        session['group'] = group
+        session['group_id'] = id
+    else:
+        return redirect(url_for('home'))
+
+    return render_template("profile/group.html", group = group, users = list_users)
+
+'''
+    NEEDS ATTENTION!!
+'''
+# Update group (add user)
 @app.route('/groups', methods = ["POST"])
-def add_user_group():
+def add_user():
 
     user_to_add = request.form.get('user')
     update_user_groups(user_to_add, session['group'])
 
     return redirect(url_for('group', id = session['group_id']))
+
+# Update group (rename group)
 
 # Delete group
 @app.route('/groups/delete/<id>')

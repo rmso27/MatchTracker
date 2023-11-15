@@ -24,6 +24,7 @@ def create_group_db(user_name, user_id, group_name):
             "name": group_name,
             "owner": user_name, # same as the logged in user
             "owner_id": user_id,
+            "members": [],
             "createdAt": timestamp
         })
         update_user_groups(user_name, group_name)
@@ -33,11 +34,14 @@ def create_group_db(user_name, user_id, group_name):
 
     return result_msg
 
-def read_group(groups):
+def read_group_db(groups):
+
+    print(f"I'M HERE!!! 2")
 
     groups_details = []
 
     for group in groups:
+        print(f"GROUP: {group}")
         group_data = Database.find_one('groups', {"name": group})
         if group_data:
             groups_details += [{
@@ -46,6 +50,8 @@ def read_group(groups):
                 "owner": group_data['owner'],
                 "createdAt": group_data['createdAt']
             }]
+
+    print(f"GROUPS DETAILS: {groups_details}")
 
     return groups_details
 

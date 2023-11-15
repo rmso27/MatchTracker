@@ -30,10 +30,11 @@ def create_user():
         Database.insert_one('users', {
             "user_id": uuid.uuid4().hex,
             "name": request.form['name'],
+            "email": request.form['email'],
             "user": request.form['user'],
             "password": hash_me(request.form['password']),
+            "groups": [],
             "createdAt": timestamp,
-            "groups": []
         })
         result_msg = "A sua conta foi criada com sucesso."
     else:
