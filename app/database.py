@@ -17,7 +17,7 @@ class Database(object):
     # Initiate DB connection
     @staticmethod
     def initialize():
-        mongodb = pymongo.MongoClient(Database.mongodb_conn_string)
+        mongodb = pymongo.MongoClient(Database.mongodb_conn_string, tls = True, tlsCertificateKeyFile = 'configs/mongodb_cert.pem')
         Database.DATABASE = mongodb['MatchTracker']
 
     # Insert many method
