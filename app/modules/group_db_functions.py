@@ -19,7 +19,7 @@ def create_group_db(user_name, user_id, group_name):
 
     # If group doesn't exist, insert data into database
     if group_exists != 0:
-        Database.insert_one('groups', {
+        Database.insert_one('Groups', {
             "group_id": uuid.uuid4().hex,
             "name": group_name,
             "owner": user_name, # same as the logged in user
@@ -42,7 +42,7 @@ def read_group_db(groups):
 
     for group in groups:
         print(f"GROUP: {group}")
-        group_data = Database.find_one('groups', {"name": group})
+        group_data = Database.find_one('Groups', {"name": group})
         if group_data:
             groups_details += [{
                 "id": group_data['group_id'],
@@ -57,7 +57,7 @@ def read_group_db(groups):
 
 def read_group_by_id(id):
 
-    group_data = Database.find_one('groups', {"group_id": id})
+    group_data = Database.find_one('Groups', {"group_id": id})
 
     group = group_data['name']
 
@@ -69,7 +69,7 @@ def update_group():
 
 def delete_group_db(id):
 
-    Database.delete_one('groups', {"group_id": id})
+    Database.delete_one('Groups', {"group_id": id})
 
     return 0
 
@@ -82,7 +82,7 @@ def create_group_player():
     group_id = 0
     player_id = 0
 
-    Database.insert_one('groups_players', {
+    Database.insert_one('Groups_players', {
         "group_id": group_id,
         "player_id": player_id,
         "matches": 0,

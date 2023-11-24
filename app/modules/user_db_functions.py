@@ -27,7 +27,7 @@ def create_user():
 
     # If user doesn't exist, insert data into database
     if user_exists != 0:
-        Database.insert_one('users', {
+        Database.insert_one('Users', {
             "user_id": uuid.uuid4().hex,
             "name": request.form['name'],
             "email": request.form['email'],
@@ -48,7 +48,7 @@ def read_user():
 
 def update_user_groups(user_name, group_name):
 
-    Database.update_one('users', {"name": user_name}, {"$push": {"groups": group_name}})
+    Database.update_one('Users', {"name": user_name}, {"$push": {"groups": group_name}})
 
 def delete_user():
 
@@ -58,7 +58,7 @@ def delete_user():
 # def validate_user(user):
 
 #     # Query database for user data
-#     if Database.find_one('users', {"user": user}):
+#     if Database.find_one('Users', {"user": user}):
 #         user_exists = 0
 #     else:
 #         user_exists = 1
@@ -68,7 +68,7 @@ def delete_user():
 def read_users():
 
     list_users = []
-    users = Database.find('users', {}, {'name': 1})
+    users = Database.find('Users', {}, {'name': 1})
     for user in users:
         list_users += [user['name']]
 
@@ -78,7 +78,7 @@ def read_users():
 def validate_login():
 
     # Query database for user data
-    user = Database.find_one('users', {"user": request.form['user']})
+    user = Database.find_one('Users', {"user": request.form['user']})
 
     # If the user exists, validate password and set login status
     if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['password']):
@@ -92,7 +92,7 @@ def validate_login():
 def get_user_groups(user_id):
 
     # Query database for user data
-    user = Database.find_one('users', {"user_id": user_id})
+    user = Database.find_one('Users', {"user_id": user_id})
 
     groups_list = user['groups']
 
