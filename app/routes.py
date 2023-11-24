@@ -8,7 +8,7 @@ import os
 
 # Import functions
 from .modules.user_db_functions import create_user, validate_login, get_user_groups, read_users, update_user_groups
-from .modules.group_db_functions import create_group_db, read_group_db, read_group_by_id, delete_group_db
+from .modules.group_db_functions import create_group_db, read_group_db, read_group_by_id, delete_group_db, update_group_members
 
 ## MAIN VARS ##
 
@@ -135,12 +135,13 @@ def create_group():
 @app.route('/groups/<id>')
 def read_group(id):
 
-    # Validate if the uer is logged in. If not, redirect to homepage.
+    # Validate if the user is logged in. If not, redirect to homepage.
     if session['logged_in'] == True:
         group = read_group_by_id(id)
         list_users = read_users()
         session['group'] = group
         session['group_id'] = id
+
     else:
         return redirect(url_for('home'))
 
@@ -150,13 +151,14 @@ def read_group(id):
     NEEDS ATTENTION!!
 '''
 # Update group (add user)
-@app.route('/groups', methods = ["POST"])
+@app.route('/groups/add-user', methods = ["POST"])
 def add_user():
 
     user_to_add = request.form.get('user')
     update_user_groups(user_to_add, session['group'])
+    update_group_members(session['group'], user_to_add)
 
-    return redirect(url_for('group', id = session['group_id']))
+    return redirect(url_for('read_group', id = session['group_id']))
 
 # Update group (rename group)
 

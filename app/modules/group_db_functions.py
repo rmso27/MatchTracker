@@ -67,6 +67,10 @@ def update_group():
 
     return 0
 
+def update_group_members(group_name, user_name):
+
+    Database.update_one('Groups', {"name": group_name}, {"$push": {"members": user_name}})
+
 def delete_group_db(id):
 
     Database.delete_one('Groups', {"group_id": id})
