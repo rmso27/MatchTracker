@@ -48,7 +48,8 @@ def read_user():
 
 def update_user_groups(user_name, group_name):
 
-    Database.update_one('Users', {"name": user_name}, {"$push": {"groups": group_name}})
+    groups_data = {"group": group_name, "wins": 0, "draws": 0, "loses": 0}
+    Database.update_one('Users', {"name": user_name}, {"$push": {"groups": groups_data}})
 
 def delete_user():
 
