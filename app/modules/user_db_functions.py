@@ -42,15 +42,24 @@ def create_user():
 
     return result_msg
 
+# Read user
 def read_user():
 
     return 0
 
+# Update user groups
 def update_user_groups(user_name, group_name):
+
+    '''
+        This function is used when we add a user to a group.
+        An object is created with the group name and with the values wins, draws and loses
+        set to 0.
+    '''
 
     groups_data = {"group": group_name, "wins": 0, "draws": 0, "loses": 0}
     Database.update_one('Users', {"name": user_name}, {"$push": {"groups": groups_data}})
 
+# Delete user
 def delete_user():
 
     return 0
