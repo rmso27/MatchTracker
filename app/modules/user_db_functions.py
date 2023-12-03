@@ -22,8 +22,7 @@ def create_user():
     timestamp = get_current_date()
 
     # Validate if user exists
-    # user_exists = validate_user(request.form['user'])
-    user_exists = 1
+    user_exists = create_user_pre_validations(request.form['user'], request.form['email'])
 
     # If user doesn't exist, insert data into database
     if user_exists != 0:
@@ -35,6 +34,9 @@ def create_user():
             "password": hash_me(request.form['password']),
             "groups": [],
             "createdAt": timestamp,
+            "isAdmin": False, # Should be set to false
+            "isActive": True,
+            "isDeleted": False
         })
         result_msg = "A sua conta foi criada com sucesso."
     else:
@@ -64,16 +66,16 @@ def delete_user():
 
     return 0
 
-# # Validate user
-# def validate_user(user):
+# Validate user
+def create_user_pre_validations(user, email):
 
-#     # Query database for user data
-#     if Database.find_one('Users', {"user": user}):
-#         user_exists = 0
-#     else:
-#         user_exists = 1
+    # Check if user or email already exists in the database
+    if Database.find_one('Users', {"user": user}) or Database.find_one('Users', {"email": email}):
+        user_exists = 0
+    else:
+        user_exists = 1
 
-#     return user_exists
+    return user_exists
 
 def read_users():
 
