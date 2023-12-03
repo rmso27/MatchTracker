@@ -36,13 +36,11 @@ def create_group_db(user_name, user_id, group_name):
 
 def read_group_db(groups):
 
-    print(f"I'M HERE!!! 2")
-
     groups_details = []
 
+    # Create a list with the groups that the user is in
     for group in groups:
-        print(f"GROUP: {group}")
-        group_data = Database.find_one('Groups', {"name": group})
+        group_data = Database.find_one('Groups', {"name": group['group']})
         if group_data:
             groups_details += [{
                 "id": group_data['group_id'],
@@ -50,8 +48,6 @@ def read_group_db(groups):
                 "owner": group_data['owner'],
                 "createdAt": group_data['createdAt']
             }]
-
-    print(f"GROUPS DETAILS: {groups_details}")
 
     return groups_details
 
