@@ -24,7 +24,13 @@ def create_group_db(user_name, user_id, group_name):
             "name": group_name,
             "owner": user_name, # same as the logged in user
             "owner_id": user_id,
-            "members": [],
+            "members": [{
+                "player": user_name,
+                "wins": 0,
+                "draws": 0,
+                "loses": 0,
+                "ratio": "0.00%"
+            }],
             "createdAt": timestamp
         })
         update_user_groups(user_name, group_name)
@@ -54,10 +60,10 @@ def read_group_db(groups):
 def read_group_by_id(id):
 
     group_data = Database.find_one('Groups', {"group_id": id})
+    group_name = group_data['name']
+    group_members = group_data['members']
 
-    group = group_data['name']
-
-    return group
+    return group_name, group_members
 
 def update_group():
 
