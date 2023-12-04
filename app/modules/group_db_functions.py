@@ -25,11 +25,12 @@ def create_group_db(user_name, user_id, group_name):
             "owner": user_name, # same as the logged in user
             "owner_id": user_id,
             "members": [{
-                "player": user_name,
+                "name": user_name,
                 "wins": 0,
                 "draws": 0,
                 "loses": 0,
-                "ratio": "0.00%"
+                "ratio": "0.00%",
+                "points": 0
             }],
             "createdAt": timestamp
         })
@@ -71,7 +72,15 @@ def update_group():
 
 def update_group_members(group_name, user_name):
 
-    Database.update_one('Groups', {"name": group_name}, {"$push": {"members": user_name}})
+    Database.update_one('Groups', {"name": group_name}, {"$push": {"members": {
+                "name": user_name,
+                "wins": 0,
+                "draws": 0,
+                "loses": 0,
+                "ratio": "0.00%",
+                "points": 0
+            }
+    }})
 
 def delete_group_db(id):
 
