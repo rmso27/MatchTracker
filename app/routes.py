@@ -137,15 +137,15 @@ def read_group(id):
 
     # Validate if the user is logged in. If not, redirect to homepage.
     if session['logged_in'] == True:
-        group = read_group_by_id(id)
+        group_name, group_members = read_group_by_id(id)
         list_users = read_users()
-        session['group'] = group
+        session['group'] = group_name
         session['group_id'] = id
 
     else:
         return redirect(url_for('home'))
 
-    return render_template("profile/group.html", group = group, users = list_users)
+    return render_template("profile/group.html", group = group_name, members = group_members, users = list_users)
 
 '''
     NEEDS ATTENTION!!
